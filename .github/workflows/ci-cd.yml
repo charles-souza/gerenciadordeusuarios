@@ -1,0 +1,75 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Configurar JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Instalar dependências
+        run: mvn install -DskipTests
+
+      - name: Executar testes
+        run: mvn test
+
+      - name: Analisar qualidade do código com SonarQube
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=charles-souza_gerenciadordeusuarios
+
+      - name: Criar e enviar imagem Docker
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: |
+          docker build -t $DOCKER_USERNAME/gerenciadordeusuarios:latest .
+          echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+          docker push $DOCKER_USERNAME/gerenciadordeusuarios:latest        
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Build do container Docker
+        run: |
+          docker build -t meu-app:latest .
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+          docker tag meu-app:latest meu-repo-docker/meu-app:latest
+          docker push meu-repo-docker/meu-app:latest
+
+      - name: Deploy no Servidor
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SERVER_USER: ${{ secrets.SERVER_USER }}
+          SERVER_IP: ${{ secrets.SERVER_IP }}
+        run: |
+          echo "$SSH_PRIVATE_KEY" > private_key && chmod 600 private_key
+          ssh -o StrictHostKeyChecking=no -i private_key $SERVER_USER@$SERVER_IP << 'EOF'
+            docker pull $DOCKER_USERNAME/gerenciadordeusuarios:latest
+            docker stop gerenciadordeusuarios || true
+            docker rm gerenciadordeusuarios || true
+            docker run -d --name gerenciadordeusuarios -p 8080:8080 $DOCKER_USERNAME/gerenciadordeusuarios:latest
+          EOF 
