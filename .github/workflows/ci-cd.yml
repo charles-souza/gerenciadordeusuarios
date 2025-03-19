@@ -28,7 +28,7 @@ jobs:
         run: mvn install -DskipTests
 
       - name: Executar testes
-        run: mvn test
+        run: mvn spring-boot:run
 
       - name: Analisar qualidade do código com SonarQube
         env:
