@@ -13,6 +13,21 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_DB: gerenciadordeusuarios
+          POSTGRES_USER: admin
+          POSTGRES_PASSWORD: admin
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U admin -d gerenciadordeusuarios"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
       - name: Checkout do código
@@ -23,6 +38,20 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
+          
+      - name: Configurar PostgreSQL no application.properties
+        run: |
+          echo 'spring:
+            datasource:
+              url: jdbc:postgresql://localhost:5432/gerenciadordeusuarios
+              username: admin
+              password: admin
+              driver-class-name: org.postgresql.Driver
+            jpa:
+              properties:
+                hibernate:
+                  dialect: org.hibernate.dialect.PostgreSQLDialect
+          ' > src/main/resources/application.properties    
 
       - name: Instalar dependências
         run: mvn install -DskipTests
@@ -33,7 +62,7 @@ jobs:
       - name: Analisar qualidade do código com SonarQube
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=charles-souza_gerenciadordeusuarios
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar -Dsonar.projectKey=charles-souza_gerenciadordeusuarios
 
       - name: Criar e enviar imagem Docker
         env:
