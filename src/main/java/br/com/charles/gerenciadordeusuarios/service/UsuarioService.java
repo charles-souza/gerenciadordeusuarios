@@ -1,6 +1,7 @@
 package br.com.charles.gerenciadordeusuarios.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import br.com.charles.gerenciadordeusuarios.dto.UsuarioDTO;
 import br.com.charles.gerenciadordeusuarios.entity.UsuarioEntity;
 import br.com.charles.gerenciadordeusuarios.repository.UsuarioRepository;
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class UsuarioService {
@@ -31,12 +33,29 @@ public class UsuarioService {
 	}
 	
 	public void excluir(Long id) {
-		UsuarioEntity usuario = usuarioRepository.findById(id).get();
-		usuarioRepository.delete(usuario);
+	    Optional<UsuarioEntity> optionalUsuario = usuarioRepository.findById(id);
+
+	    if (optionalUsuario.isPresent()) {
+	        UsuarioEntity usuario = optionalUsuario.get();
+	        // Lógica para exclusão do usuário
+	        usuarioRepository.delete(usuario);
+	    } else {
+	        // Lidando com o caso em que o usuário não é encontrado
+	        throw new EntityNotFoundException("Usuário com ID " + id + " não encontrado.");
+	    }
 	}
+
 	
 	public UsuarioDTO buscarporId(Long id) {
-		return new UsuarioDTO(usuarioRepository.findById(id).get());		
+	    Optional<UsuarioEntity> optionalUsuario = usuarioRepository.findById(id);
+
+	    if (optionalUsuario.isPresent()) {
+	        return new UsuarioDTO(optionalUsuario.get());
+	    } else {
+	        // Lidando com o caso em que o usuário não é encontrado
+	        throw new EntityNotFoundException("Usuário com ID " + id + " não encontrado.");
+	    }
 	}
+
 
 }
