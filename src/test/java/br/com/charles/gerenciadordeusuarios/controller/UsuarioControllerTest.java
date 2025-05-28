@@ -10,9 +10,9 @@ import org.mockito.Mockito;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
@@ -25,12 +25,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @WebMvcTest(UsuarioController.class)
-public class UsuarioControllerTest {
+class UsuarioControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
+    @MockitoBean
     private UsuarioService usuarioService;
 
     @Autowired
@@ -39,7 +39,7 @@ public class UsuarioControllerTest {
     private UsuarioDTO usuarioDTO;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         usuarioDTO = new UsuarioDTO();
         usuarioDTO.setId(1L);
         usuarioDTO.setNome("Charles");
@@ -47,7 +47,7 @@ public class UsuarioControllerTest {
     }
 
     @Test
-    public void testListarTodos() throws Exception {
+    void testListarTodos() throws Exception {
         List<UsuarioDTO> usuarios = Arrays.asList(usuarioDTO);
         Mockito.when(usuarioService.listarTodos()).thenReturn(usuarios);
 
@@ -59,7 +59,7 @@ public class UsuarioControllerTest {
     }
 
     @Test
-    public void testInserir() throws Exception {
+    void testInserir() throws Exception {
         doNothing().when(usuarioService).inserir(any(UsuarioDTO.class));
 
         mockMvc.perform(post("/usuario")
@@ -69,7 +69,7 @@ public class UsuarioControllerTest {
     }
 
     @Test
-    public void testAlterar() throws Exception {
+    void testAlterar() throws Exception {
         Mockito.when(usuarioService.alterar(any(UsuarioDTO.class))).thenReturn(usuarioDTO);
 
         mockMvc.perform(put("/usuario")
@@ -82,7 +82,7 @@ public class UsuarioControllerTest {
     }
 
     @Test
-    public void testExcluir() throws Exception {
+    void testExcluir() throws Exception {
         doNothing().when(usuarioService).excluir(1L);
 
         mockMvc.perform(delete("/usuario/1"))
