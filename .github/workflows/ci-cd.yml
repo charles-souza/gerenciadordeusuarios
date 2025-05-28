@@ -68,10 +68,11 @@ jobs:
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-        run: echo "DOCKER_USERNAME = $DOCKER_USERNAME" |
+        run: |
+          echo "DOCKER_USERNAME = $DOCKER_USERNAME"
           docker build -t $DOCKER_USERNAME/gerenciadordeusuarios:latest .
           echo "$DOCKER_PASSWORD" | docker login "$DOCKER_USERNAME" --password-stdin
-          docker push $DOCKER_USERNAME/gerenciadordeusuarios:latest        
+          docker push $DOCKER_USERNAME/gerenciadordeusuarios:latest           
 
   deploy:
     needs: build
