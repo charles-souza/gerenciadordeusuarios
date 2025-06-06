@@ -38,7 +38,7 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-          
+
       - name: Configurar PostgreSQL no application.properties
         run: |
           echo 'spring:
