@@ -1,6 +1,6 @@
 package br.com.charles.gerenciadordeusuarios.entity;
 
-import br.com.charles.gerenciadordeusuarios.dto.UsuarioDTO;
+import br.com.charles.gerenciadordeusuarios.dto.UsuarioDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,7 +30,7 @@ public class UsuarioEntity {
   @Column(nullable = false)
   private String email;
 
-  public UsuarioEntity(UsuarioDTO usuario) {
+  public UsuarioEntity(UsuarioDto usuario) {
     BeanUtils.copyProperties(usuario, this);
   }
 
