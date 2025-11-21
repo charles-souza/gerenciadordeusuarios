@@ -1,6 +1,6 @@
 package br.com.charles.gerenciadordeusuarios.controller;
 
-import br.com.charles.gerenciadordeusuarios.dto.UsuarioDTO;
+import br.com.charles.gerenciadordeusuarios.dto.UsuarioDto;
 import br.com.charles.gerenciadordeusuarios.service.UsuarioService;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
@@ -23,17 +23,17 @@ public class UsuarioController {
   }
 
   @GetMapping
-  public List<UsuarioDTO> listarTodos() {
+  public List<UsuarioDto> listarTodos() {
     return usuarioService.listarTodos();
   }
 
   @PostMapping
-  public void inserir(@RequestBody UsuarioDTO usuario) {
+  public void inserir(@RequestBody UsuarioDto usuario) {
     usuarioService.inserir(usuario);
   }
 
   @PutMapping
-  public UsuarioDTO alterar(@RequestBody UsuarioDTO usuario) {
+  public UsuarioDto alterar(@RequestBody UsuarioDto usuario) {
     return usuarioService.alterar(usuario);
   }
 

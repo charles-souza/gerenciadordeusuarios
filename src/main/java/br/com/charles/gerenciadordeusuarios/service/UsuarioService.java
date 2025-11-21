@@ -1,6 +1,6 @@
 package br.com.charles.gerenciadordeusuarios.service;
 
-import br.com.charles.gerenciadordeusuarios.dto.UsuarioDTO;
+import br.com.charles.gerenciadordeusuarios.dto.UsuarioDto;
 import br.com.charles.gerenciadordeusuarios.entity.UsuarioEntity;
 import br.com.charles.gerenciadordeusuarios.repository.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -17,19 +17,19 @@ public class UsuarioService {
     this.usuarioRepository = usuarioRepository;
   }
 
-  public List<UsuarioDTO> listarTodos() {
+  public List<UsuarioDto> listarTodos() {
     List<UsuarioEntity> usuarios = usuarioRepository.findAll();
-    return usuarios.stream().map(UsuarioDTO::new).toList();
+    return usuarios.stream().map(UsuarioDto::new).toList();
   }
 
-  public void inserir(UsuarioDTO usuario) {
+  public void inserir(UsuarioDto usuario) {
     UsuarioEntity usuarioEntity = new UsuarioEntity(usuario);
     usuarioRepository.save(usuarioEntity);
   }
 
-  public UsuarioDTO alterar(UsuarioDTO usuario) {
+  public UsuarioDto alterar(UsuarioDto usuario) {
     UsuarioEntity usuarioEntity = new UsuarioEntity(usuario);
-    return new UsuarioDTO(usuarioRepository.save(usuarioEntity));
+    return new UsuarioDto(usuarioRepository.save(usuarioEntity));
   }
 
   public void excluir(Long id) {
@@ -46,11 +46,11 @@ public class UsuarioService {
   }
 
 
-  public UsuarioDTO buscarporId(Long id) {
+  public UsuarioDto buscarporId(Long id) {
     Optional<UsuarioEntity> optionalUsuario = usuarioRepository.findById(id);
 
     if (optionalUsuario.isPresent()) {
-      return new UsuarioDTO(optionalUsuario.get());
+      return new UsuarioDto(optionalUsuario.get());
     } else {
       // Lidando com o caso em que o usuário não é encontrado
       throw new EntityNotFoundException("Usuário com ID " + id + " não encontrado.");
