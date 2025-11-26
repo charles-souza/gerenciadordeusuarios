@@ -63,6 +63,9 @@ jobs:
       #          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       #        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar -Dsonar.projectKey=charles-souza_gerenciadordeusuarios
 
+      - name: Compilar o projeto
+        run: mvn clean package -DskipTests
+
       - name: Criar e enviar imagem Docker
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
