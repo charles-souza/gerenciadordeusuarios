@@ -8,6 +8,9 @@
 FROM eclipse-temurin:17-jdk
 WORKDIR /app
 
+RUN useradd -m admin
+USER admin
+
 # Copie o JAR gerado para a imagem final
 COPY target/*.jar app.jar
 
