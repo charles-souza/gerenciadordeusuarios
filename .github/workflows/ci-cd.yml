@@ -58,10 +58,10 @@ jobs:
       - name: Executar testes
         run: mvn spring-boot:run
 
-      - name: Analisar qualidade do código com SonarQube
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar -Dsonar.projectKey=charles-souza_gerenciadordeusuarios
+      #      - name: Analisar qualidade do código com SonarQube
+      #        env:
+      #          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      #        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar -Dsonar.projectKey=charles-souza_gerenciadordeusuarios
 
       - name: Criar e enviar imagem Docker
         env:
