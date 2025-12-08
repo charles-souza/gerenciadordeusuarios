@@ -87,10 +87,10 @@ jobs:
 
       - name: Build do container Docker
         run: |
-          docker build -t meu-app:latest .
+          docker build -t gerenciadordeusuarios:latest .
           echo "${{ secrets.DOCKER_PASSWORD }}" | docker login "${{ secrets.DOCKER_USERNAME }}" --password-stdin
-          docker tag meu-app:latest meu-repo-docker/meu-app:latest
-          docker push meu-repo-docker/meu-app:latest
+          docker tag gerenciadordeusuarios:latest charlessouza/gerenciadordeusuarios:latest
+          docker push charlessouza/gerenciadordeusuarios:latest
 
       - name: Deploy no Servidor
         env:
