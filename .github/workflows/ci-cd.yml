@@ -99,9 +99,9 @@ jobs:
           SERVER_IP: ${{ secrets.SERVER_IP }}
         run: |
           echo "$SSH_PRIVATE_KEY" > private_key && chmod 600 private_key
-          ssh -o StrictHostKeyChecking=no -i private_key $SERVER_USER@$SERVER_IP << 'EOF'
-            docker pull $DOCKER_USERNAME/gerenciadordeusuarios:latest
+          ssh -o StrictHostKeyChecking=no -i private_key "${{ SERVER_USER@$SERVER_IP }}" << 'EOF'
+            docker pull "${{ secrets.DOCKER_USERNAME }}"/gerenciadordeusuarios:latest
             docker stop gerenciadordeusuarios || true
             docker rm gerenciadordeusuarios || true
-            docker run -d --name gerenciadordeusuarios -p 8080:8080 $DOCKER_USERNAME/gerenciadordeusuarios:latest
+            docker run -d --name gerenciadordeusuarios -p 8080:8080 "${{ secrets.DOCKER_USERNAME }}"/gerenciadordeusuarios:latest
           EOF 
