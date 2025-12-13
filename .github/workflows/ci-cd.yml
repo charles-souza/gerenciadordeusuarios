@@ -91,17 +91,3 @@ jobs:
           echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
           docker tag gerenciadordeusuarios:latest charlessouza/gerenciadordeusuarios:latest
           docker push charlessouza/gerenciadordeusuarios:latest
-
-      - name: Deploy no Servidor
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          SERVER_USER: ${{ secrets.SERVER_USER }}
-          SERVER_IP: ${{ secrets.SERVER_IP }}
-        run: |
-          echo "$SSH_PRIVATE_KEY" > private_key && chmod 600 private_key
-          ssh -o StrictHostKeyChecking=no -i private_key "${{ SERVER_USER@$SERVER_IP }}" << 'EOF'
-            docker pull "${{ secrets.DOCKER_USERNAME }}"/gerenciadordeusuarios:latest
-            docker stop gerenciadordeusuarios || true
-            docker rm gerenciadordeusuarios || true
-            docker run -d --name gerenciadordeusuarios -p 8080:8080 "${{ secrets.DOCKER_USERNAME }}"/gerenciadordeusuarios:latest
-          EOF 
