@@ -9,7 +9,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import br.com.charles.gerenciadordeusuarios.dto.UsuarioDTO;
+import br.com.charles.gerenciadordeusuarios.dto.UsuarioDto;
 import br.com.charles.gerenciadordeusuarios.entity.UsuarioEntity;
 import br.com.charles.gerenciadordeusuarios.repository.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -35,14 +35,14 @@ class UsuarioServiceTest {
   }
 
   @Test
-  void listarTodos_DeveRetornarListaDeUsuarios() {
+  void listarTodosDeveRetornarListaDeUsuarios() {
     // Configuração dos mocks
     UsuarioEntity usuario1 = new UsuarioEntity();
     UsuarioEntity usuario2 = new UsuarioEntity();
     when(usuarioRepository.findAll()).thenReturn(List.of(usuario1, usuario2));
 
     // Chamada do método
-    List<UsuarioDTO> resultado = usuarioService.listarTodos();
+    List<UsuarioDto> resultado = usuarioService.listarTodos();
 
     // Verificações
     assertEquals(2, resultado.size());
@@ -50,28 +50,28 @@ class UsuarioServiceTest {
   }
 
   @Test
-  void inserir_DeveSalvarUsuario() {
+  void inserirDeveSalvarUsuario() {
     // Configuração do mock
-    UsuarioDTO usuarioDTO = new UsuarioDTO();
-    UsuarioEntity usuarioEntity = new UsuarioEntity(usuarioDTO);
+    UsuarioDto usuarioDto = new UsuarioDto();
+    UsuarioEntity usuarioEntity = new UsuarioEntity(usuarioDto);
     when(usuarioRepository.save(any(UsuarioEntity.class))).thenReturn(usuarioEntity);
 
     // Chamada do método
-    usuarioService.inserir(usuarioDTO);
+    usuarioService.inserir(usuarioDto);
 
     // Verificação
     verify(usuarioRepository, times(1)).save(any(UsuarioEntity.class));
   }
 
   @Test
-  void alterar_DeveAtualizarUsuario() {
+  void alterarDeveAtualizarUsuario() {
     // Configuração do mock
-    UsuarioDTO usuarioDTO = new UsuarioDTO();
-    UsuarioEntity usuarioEntity = new UsuarioEntity(usuarioDTO);
+    UsuarioDto usuarioDto = new UsuarioDto();
+    UsuarioEntity usuarioEntity = new UsuarioEntity(usuarioDto);
     when(usuarioRepository.save(any(UsuarioEntity.class))).thenReturn(usuarioEntity);
 
     // Chamada do método
-    UsuarioDTO resultado = usuarioService.alterar(usuarioDTO);
+    UsuarioDto resultado = usuarioService.alterar(usuarioDto);
 
     // Verificações
     assertNotNull(resultado);
@@ -79,7 +79,7 @@ class UsuarioServiceTest {
   }
 
   @Test
-  void excluir_DeveExcluirUsuario() {
+  void excluirDeveExcluirUsuario() {
     // Configuração do mock
     Long id = 1L;
     UsuarioEntity usuarioEntity = new UsuarioEntity();
@@ -93,7 +93,7 @@ class UsuarioServiceTest {
   }
 
   @Test
-  void excluir_DeveLancarExcecaoQuandoUsuarioNaoExistir() {
+  void excluirDeveLancarExcecaoQuandoUsuarioNaoExistir() {
     // Configuração do mock
     Long id = 1L;
     when(usuarioRepository.findById(id)).thenReturn(Optional.empty());
@@ -104,14 +104,14 @@ class UsuarioServiceTest {
   }
 
   @Test
-  void buscarPorId_DeveRetornarUsuario() {
+  void buscarPorIdDeveRetornarUsuario() {
     // Configuração do mock
     Long id = 1L;
     UsuarioEntity usuarioEntity = new UsuarioEntity();
     when(usuarioRepository.findById(id)).thenReturn(Optional.of(usuarioEntity));
 
     // Chamada do método
-    UsuarioDTO resultado = usuarioService.buscarporId(id);
+    UsuarioDto resultado = usuarioService.buscarporId(id);
 
     // Verificações
     assertNotNull(resultado);
@@ -119,7 +119,7 @@ class UsuarioServiceTest {
   }
 
   @Test
-  void buscarPorId_DeveLancarExcecaoQuandoUsuarioNaoExistir() {
+  void buscarPorIdDeveLancarExcecaoQuandoUsuarioNaoExistir() {
     // Configuração do mock
     Long id = 1L;
     when(usuarioRepository.findById(id)).thenReturn(Optional.empty());
