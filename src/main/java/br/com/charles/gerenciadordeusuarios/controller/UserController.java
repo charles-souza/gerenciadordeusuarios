@@ -1,7 +1,7 @@
 package br.com.charles.gerenciadordeusuarios.controller;
 
-import br.com.charles.gerenciadordeusuarios.dto.UsuarioDto;
-import br.com.charles.gerenciadordeusuarios.service.UsuarioService;
+import br.com.charles.gerenciadordeusuarios.dto.UserDto;
+import br.com.charles.gerenciadordeusuarios.service.UserService;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,31 +15,31 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/usuario")
-public class UsuarioController {
-  private final UsuarioService usuarioService;
+public class UserController {
+  private final UserService userService;
 
-  public UsuarioController(UsuarioService usuarioService) {
-    this.usuarioService = usuarioService;
+  public UserController(UserService userService) {
+    this.userService = userService;
   }
 
   @GetMapping
-  public List<UsuarioDto> listarTodos() {
-    return usuarioService.listarTodos();
+  public List<UserDto> listAll() {
+    return userService.listAll();
   }
 
   @PostMapping
-  public void inserir(@RequestBody UsuarioDto usuario) {
-    usuarioService.inserir(usuario);
+  public void insert(@RequestBody UserDto user) {
+    userService.inserir(user);
   }
 
   @PutMapping
-  public UsuarioDto alterar(@RequestBody UsuarioDto usuario) {
-    return usuarioService.alterar(usuario);
+  public UserDto update(@RequestBody UserDto user) {
+    return userService.update(user);
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<Void> excluir(@PathVariable Long id) {
-    usuarioService.excluir(id);
+  public ResponseEntity<Void> delete(@PathVariable Long id) {
+    userService.delete(id);
     return ResponseEntity.ok().build();
   }
 

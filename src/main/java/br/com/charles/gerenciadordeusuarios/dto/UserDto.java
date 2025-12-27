@@ -3,7 +3,7 @@ package br.com.charles.gerenciadordeusuarios.dto;
 import br.com.charles.gerenciadordeusuarios.entity.UsuarioEntity;
 import org.springframework.beans.BeanUtils;
 
-public class UsuarioDto {
+public class UserDto {
 
   private Long id;
   private String nome;
@@ -11,11 +11,11 @@ public class UsuarioDto {
   private String senha;
   private String email;
 
-  public UsuarioDto(UsuarioEntity usuario) {
+  public UserDto(UsuarioEntity usuario) {
     BeanUtils.copyProperties(usuario, this);
   }
 
-  public UsuarioDto() {
+  public UserDto() {
 
   }
 

@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: gerenciadordeusuarios
+  datasource:
+    url: jdbc:postgresql://localhost:5432/gerenciadordeusuarios
+    username: postgres
+    password: local
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
+sonar:
+  projectKey: charles-souza_gerenciadordeusuarios
+  organization: charles-souza
+
+SONAR_TOKEN: 97110d72a58dcaf902c720841f98548fd87c5dc7
+

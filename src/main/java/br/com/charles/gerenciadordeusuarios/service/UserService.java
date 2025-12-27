@@ -1,6 +1,6 @@
 package br.com.charles.gerenciadordeusuarios.service;
 
-import br.com.charles.gerenciadordeusuarios.dto.UsuarioDto;
+import br.com.charles.gerenciadordeusuarios.dto.UserDto;
 import br.com.charles.gerenciadordeusuarios.entity.UsuarioEntity;
 import br.com.charles.gerenciadordeusuarios.repository.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -9,30 +9,30 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UsuarioService {
+public class UserService {
 
   private final UsuarioRepository usuarioRepository;
 
-  public UsuarioService(UsuarioRepository usuarioRepository) {
+  public UserService(UsuarioRepository usuarioRepository) {
     this.usuarioRepository = usuarioRepository;
   }
 
-  public List<UsuarioDto> listarTodos() {
+  public List<UserDto> listAll() {
     List<UsuarioEntity> usuarios = usuarioRepository.findAll();
-    return usuarios.stream().map(UsuarioDto::new).toList();
+    return usuarios.stream().map(UserDto::new).toList();
   }
 
-  public void inserir(UsuarioDto usuario) {
+  public void inserir(UserDto usuario) {
     UsuarioEntity usuarioEntity = new UsuarioEntity(usuario);
     usuarioRepository.save(usuarioEntity);
   }
 
-  public UsuarioDto alterar(UsuarioDto usuario) {
+  public UserDto update(UserDto usuario) {
     UsuarioEntity usuarioEntity = new UsuarioEntity(usuario);
-    return new UsuarioDto(usuarioRepository.save(usuarioEntity));
+    return new UserDto(usuarioRepository.save(usuarioEntity));
   }
 
-  public void excluir(Long id) {
+  public void delete(Long id) {
     Optional<UsuarioEntity> optionalUsuario = usuarioRepository.findById(id);
 
     if (optionalUsuario.isPresent()) {
@@ -46,11 +46,11 @@ public class UsuarioService {
   }
 
 
-  public UsuarioDto buscarporId(Long id) {
+  public UserDto buscarporId(Long id) {
     Optional<UsuarioEntity> optionalUsuario = usuarioRepository.findById(id);
 
     if (optionalUsuario.isPresent()) {
-      return new UsuarioDto(optionalUsuario.get());
+      return new UserDto(optionalUsuario.get());
     } else {
       // Lidando com o caso em que o usuário não é encontrado
       throw new EntityNotFoundException("Usuário com ID " + id + " não encontrado.");

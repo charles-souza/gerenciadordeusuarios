@@ -9,8 +9,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import br.com.charles.gerenciadordeusuarios.dto.UsuarioDto;
-import br.com.charles.gerenciadordeusuarios.service.UsuarioService;
+import br.com.charles.gerenciadordeusuarios.dto.UserDto;
+import br.com.charles.gerenciadordeusuarios.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Collections;
 import java.util.List;
@@ -24,66 +24,66 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 
-@WebMvcTest(UsuarioController.class)
-class UsuarioControllerTest {
+@WebMvcTest(UserController.class)
+class UserControllerTest {
 
   @Autowired
   private MockMvc mockMvc;
 
   @MockitoBean
-  private UsuarioService usuarioService;
+  private UserService userService;
 
   @Autowired
   private ObjectMapper objectMapper;
 
-  private UsuarioDto usuarioDto;
+  private UserDto userDto;
 
   @BeforeEach
   void setup() {
-    usuarioDto = new UsuarioDto();
-    usuarioDto.setId(1L);
-    usuarioDto.setNome("Charles");
-    usuarioDto.setEmail("charles@email.com");
+    userDto = new UserDto();
+    userDto.setId(1L);
+    userDto.setNome("Charles");
+    userDto.setEmail("charles@email.com");
   }
 
   @Test
-  void testListarTodos() throws Exception {
-    List<UsuarioDto> usuarios = Collections.singletonList(usuarioDto);
-    Mockito.when(usuarioService.listarTodos()).thenReturn(usuarios);
+  void testListAll() throws Exception {
+    List<UserDto> usuarios = Collections.singletonList(userDto);
+    Mockito.when(userService.listAll()).thenReturn(usuarios);
 
     mockMvc.perform(get("/usuario"))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$[0].id").value(usuarioDto.getId()))
-        .andExpect(jsonPath("$[0].nome").value(usuarioDto.getNome()))
-        .andExpect(jsonPath("$[0].email").value(usuarioDto.getEmail()));
+        .andExpect(jsonPath("$[0].id").value(userDto.getId()))
+        .andExpect(jsonPath("$[0].nome").value(userDto.getNome()))
+        .andExpect(jsonPath("$[0].email").value(userDto.getEmail()));
   }
 
   @Test
-  void testInserir() throws Exception {
-    doNothing().when(usuarioService).inserir(any(UsuarioDto.class));
+  void testInsert() throws Exception {
+    doNothing().when(userService).inserir(any(UserDto.class));
 
     mockMvc.perform(post("/usuario")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(usuarioDto)))
+            .content(objectMapper.writeValueAsString(userDto)))
         .andExpect(status().isOk());
   }
 
   @Test
-  void testAlterar() throws Exception {
-    Mockito.when(usuarioService.alterar(any(UsuarioDto.class))).thenReturn(usuarioDto);
+  void testUpdate() throws Exception {
+    Mockito.when(userService.update(any(UserDto.class))).thenReturn(userDto);
 
     mockMvc.perform(put("/usuario")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(usuarioDto)))
+            .content(objectMapper.writeValueAsString(userDto)))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.id").value(usuarioDto.getId()))
-        .andExpect(jsonPath("$.nome").value(usuarioDto.getNome()))
-        .andExpect(jsonPath("$.email").value(usuarioDto.getEmail()));
+        .andExpect(jsonPath("$.id").value(userDto.getId()))
+        .andExpect(jsonPath("$.nome").value(userDto.getNome()))
+        .andExpect(jsonPath("$.email").value(userDto.getEmail()));
   }
 
   @Test
-  void testExcluir() throws Exception {
-    doNothing().when(usuarioService).excluir(1L);
+  void testDelete() throws Exception {
+    doNothing().when(userService).delete(1L);
 
     mockMvc.perform(delete("/usuario/1"))
         .andExpect(status().isOk());
